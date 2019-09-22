@@ -2,18 +2,21 @@ package com.tensquare.base.controller;
 
 import com.tensquare.base.pojo.Label;
 import com.tensquare.base.service.LabelService;
+import com.tensquare.common.entity.PageResult;
 import com.tensquare.common.entity.Result;
 import com.tensquare.common.entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @Description //标签控制层
  * @Author leichao
  * @Date 2019/9/20
  * @Version 1.0
- **/
-
+ */
 @RestController
 @RequestMapping("/label")
 public class LabelController {
@@ -22,21 +25,18 @@ public class LabelController {
     private LabelService labelService;
 
     /**
-     *      * 查询全部列表
-     *      * @return
-     *      
+     * 查询全部列表
+     * @return      
      */
     @RequestMapping(method = RequestMethod.GET)
     public Result findAll() {
-        throw new RuntimeException("测试异常");
-    //    return new Result(true, StatusCode.OK, "查询成功",labelService.findAll());
+        return new Result(true, StatusCode.OK, "查询成功",labelService.findAll());
     }
 
     /**
-     *      *  根据ID查询标签
-     *      * @param id
-     *      * @return
-     *      
+     * 根据ID查询标签
+     * @param id
+     * @return   
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Result findById(@PathVariable String id) {
@@ -44,15 +44,37 @@ public class LabelController {
     }
 
     /**
-     *      *  增加标签
+     * 根据条件查询
+     * @param searchMap
+     * @return
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public Result findSearch(@RequestBody Map searchMap) {
+        return new Result(true, StatusCode.OK, "查询成功", labelService.findSearch(searchMap));
+    }
+
+    /**
+     * 条件+分页查询
+     * @param searchMap
+     * @param page
+     * @param size
+     * @return   
+     */
+    @RequestMapping(value = "/search/{page}/{size}", method = RequestMethod.POST)
+    public Result findSearch(@RequestBody Map searchMap, @PathVariable int page, @PathVariable int size) {
+        Page pageList = labelService.findSearch(searchMap, page, size);
+        return new Result(true, StatusCode.OK, "查询成功", new PageResult<>(pageList.getTotalElements(), pageList.getContent()));
+    }
+
+    /**
+     * 增加标签
      * 北京市昌平区建材城西路金燕龙办公楼一层  电话：400-618-9090
      * 5.2.3 功能测试
-     * （1）测试查询全部数据
+     *（1）测试查询全部数据
      * 使用浏览器测试GET方法 http://localhost:9001/label
-     * （2）测试根据ID查询标签
-     *      * @param label
-     *      * @return
-     *      
+     *（2）测试根据ID查询标签
+     * @param label
+     * @return
      */
     @RequestMapping(method = RequestMethod.POST)
     public Result add(@RequestBody Label label) {
@@ -61,23 +83,21 @@ public class LabelController {
     }
 
     /**
-     *      *  修改标签
-     *      * @param label
-     *      * @return
-     *      
+     * 修改标签
+     * @param label
+     * @return
      */
     @RequestMapping(value = "/{id}", method=RequestMethod.PUT)
-    public Result update(@RequestBody Label label, @PathVariable String
-            id) {
+    public Result update(@RequestBody Label label, @PathVariable String id) {
         label.setId(id);
         labelService.update(label);
         return new Result(true, StatusCode.OK, "修改成功");
     }
     /**
-          * 删除标签
-          * @param id
-          * @return
-          */
+     * 删除标签
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{id}", method=RequestMethod.DELETE)
     public Result deleteById(@PathVariable String id) {
         labelService.deleteById(id);
