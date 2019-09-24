@@ -9,11 +9,13 @@
         <module name="tensquarebase" />
         <module name="tensquare-recruit" />
         <module name="tensquarecommom" />
+        <module name="tensquare-qa" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="tensquare-qa" options="-parameters" />
       <module name="tensquare-recruit" options="-parameters" />
       <module name="tensquarebase" options="-parameters" />
       <module name="tensquarecommom" options="-parameters" />

@@ -8,6 +8,7 @@
         <module>tensquare-commom</module>
         <module>tensquare-base</module>
         <module>tensquare-recruit</module>
+        <module>tensquare-qa</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
